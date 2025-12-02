@@ -4,12 +4,6 @@ const foodRecipeInstruction = document.querySelector('.food-recipe-instruction')
 const ingredientsList = document.querySelector('.ingredients-list')
 const heroFoodImage = document.querySelector('.hero-food-image')
 const watchLink = document.querySelector('.watch-link')
-const foodItemTemplate = document.getElementById('food-item-template')
-const clone = foodItemTemplate.content.cloneNode(true)
-
-const cardImg = document.querySelector('c-food-img')
-const cardFoodName = document.querySelector('c-food-name')
-const cardFoodDesc = document.querySelector('.c-food-description')
 
 
 // Get random meal
@@ -60,9 +54,4 @@ function renderIngredients(meal) {
             item.innerText += ` (${ingredientMeasure[index]})`
         }
     })
-}
-
-// Categories
-function renderFoodItem() {
-
 }

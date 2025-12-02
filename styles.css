@@ -15,11 +15,13 @@
 }
 
 html, body {
+    margin: 0;
+    padding: 0;
     background: url('./images/background.webp') no-repeat center center fixed;
     background-color: var(--primary-black);
     background-size: cover;
-    max-width: 100vw;
-    min-height: 100vh;
+    /* max-width: 100vw; */
+    /* min-height: 100vh; */
     font-family: "Inter", sans-serif;
 }
 
@@ -30,6 +32,7 @@ body .blur-overlay {
     width: 100%;
     max-width: 100vw;
     min-height: 100vh;
+    background-size: 100%;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, 0.4);
@@ -85,7 +88,7 @@ main {
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-ul li:hover {
+.nav-bar-container ul li:hover {
     color: var(--text-white-color);
 }
 
@@ -128,20 +131,23 @@ ul li:hover {
     width: 60%;
 }
 
-.hero-recipe .food-name {
+.hero-recipe .food-name,
+.popup-recipe .food-name {
     margin-bottom: 1em;
     border-left: 4px solid var(--primary-color);
     width: 60%;
     padding-left: .6em;
 }
 
-.hero-recipe .food-recipe-instruction {
+.hero-recipe .food-recipe-instruction,
+.popup-recipe .food-recipe {
     font-weight: 300;
     margin-bottom: 1em;
     line-height: 1.5;
 }
 
-.hero-recipe .ingredients-list li {
+.hero-recipe .ingredients-list li,
+.popup-ingredients-list li {
     list-style-type:circle;
     list-style-position: inside;
 }
@@ -151,7 +157,8 @@ ul li:hover {
     text-decoration: none;
 }
 
-.hero-food-recipe .hero-food-image {
+.hero-food-recipe .hero-food-image,
+.popup-window .popup-image-link img{
     border-radius: 40px;
     border-bottom: 3px solid var(--primary-color);
     border-right: 3px solid var(--primary-color);
@@ -165,7 +172,7 @@ ul li:hover {
     margin-top: 4em;
 }
 
-.hero-food-img-and-play-icon a {
+.hero-food-img-and-play-icon a, .popup-watch-link {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -175,11 +182,13 @@ ul li:hover {
     color: var(--text-white-color);
 }
 
-.hero-food-img-and-play-icon a:hover {
+.hero-food-img-and-play-icon a:hover, 
+.popup-watch-link:hover {
     text-decoration: underline;
 }
 
-.hero-food-img-and-play-icon a svg {
+.hero-food-img-and-play-icon a svg,
+.popup-watch-link svg {
     background-color: #DD5117;
     padding: .3em;
     border-radius: 50%;
@@ -212,16 +221,17 @@ main .hr-line {
     margin: 2em auto 0;
 }
 
-.categories {
+.categories, .meal-cards-container {
     display: grid;
     max-width: 100%;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-gap: 4em 1em;
     padding-bottom: 3em;
-    margin: 6em 8em 0;
+    margin: 3em 8em 0;
 }
 
 .food-item-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -232,15 +242,31 @@ main .hr-line {
     border-radius: 30px;
     padding: 1em;
     outline: 2px transparent;
-    transition: transform 0.4s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border-right: 2px solid var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.food-item-card::after {
+    position: absolute;
+    content: "";
+    width: 250px;
+    height: 15%;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    bottom: 0;
+    background: linear-gradient(to top, var(--primary-black), #1A1A1A, transparent);
+    filter: blur(10px);
 }
 
 .food-item-card:hover {
-    outline: 2px solid var(--primary-color);
+    /* outline: 2px solid var(--primary-color);
+    outline-offset: 10px; */
     transform: translateY(-2px);
+    box-shadow: 0 0 10px 4px var(--primary-color);
 }
 
-.categories .c-food-item-header {
+.meal-cards-container .card-food-item-header {
     align-self: flex-start;
     display: flex;
     justify-content: space-between;
@@ -248,24 +274,190 @@ main .hr-line {
     width: 100%;
 }
 
-.c-food-item-header .heart-icon {
+.card-food-item-header .heart-icon {
     margin-right: 1em;
     cursor: pointer;
 }
 
-.food-item-card .c-food-img {
-    margin-top: -2.8em;
+.food-item-card .card-food-img {
+    margin-top: -3.4em;
     filter: drop-shadow(0 5px 15px var(--primary-black));
     transition: transform 0.4s ease;
 }
 
-.food-item-card:hover .c-food-img {
+.food-item-card:hover .card-food-img {
     transform: translateY(-3px);
 }
 
-.categories .c-food-description {
+.meal-cards-container .card-food-description {
     margin-top: 1em;
     margin-bottom: .5em;
     font-size: .77rem;
     overflow-y: auto;
+}
+
+/* Card Scrollbar */
+.card-food-description::-webkit-scrollbar,
+.sidebar-form::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 10px;
+    background: transparent;
+}
+
+.card-food-description::-webkit-scrollbar-thumb,
+.sidebar-form::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.card-food-description:hover::-webkit-scrollbar,
+.sidebar-form:hover::-webkit-scrollbar {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.card-food-description:hover::-webkit-scrollbar-thumb,
+.sidebar-form:hover::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+}
+
+
+/* ===================
+   Country Cuisine Page
+   ===================
+*/
+
+.country-cuisine-container {
+    position: relative;
+    min-height: 130vh;
+}
+
+.country-cuisine {
+    /* background-color: red; */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 2em 1em;
+    width: 70%;
+    margin-left: auto;
+}
+
+aside {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(255, 255, 255, .2);
+    border-radius: 15px;
+    padding: 1em;
+    padding-right: 0;
+    width: 15%;
+    margin-left: 2em;
+    height: 700px;
+    overflow-y: hidden;
+}
+
+aside .sidebar-form {
+    display: flex;
+    flex-direction: column;
+    gap: .7em;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.sidebar h3 {
+    color: var(--text-white-color);
+    font-weight: 500;
+    margin-bottom: 1em;
+}
+
+.sidebar-form .option-container label {
+    color: var(--text-light-color);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.option-container label:hover {
+    color: var(--text-white-color);
+}
+
+/* .option-container input[type="radio"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+} */
+
+input[type="radio"] {
+    accent-color: var(--primary-color);
+}
+
+.country-meal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    padding: 1em;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, .1);
+    transition: background-color .2s ease, transform 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.country-meal-card:hover {
+    background-color: rgba(255, 255, 255, .2);
+    border: 1px solid var(--text-light-color);
+    transform: translateY(-2px);
+}
+
+.country-meal-card .meal-card-img {
+    border-radius: 50%;
+    border: 3px solid var(--text-light-color);
+    transition: transform 0.4s ease;
+}
+
+.country-cuisine .country-meal-name {
+    text-align: center;
+    color: var(--text-white-color);
+    font-weight: 400;
+}
+
+.popup-window {
+    position: fixed;
+    z-index: 4;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, 5%);
+    top: 0;
+    width: 80%;
+    height: 90%;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 2px solid var(--text-light-color);
+    color: var(--text-light-color);
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    padding: .5em 2em;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.popup-header h1 {
+    color: var(--text-white-color);
+}
+
+.popup-content {
+    display: flex;
+    gap: 2em;
+    padding: 2em;
+}
+
+.popup-recipe .food-name {
+    font-weight: 500;
+}
+
+.popup-recipe .food-recipe {
+    font-weight: 400;
 }
