@@ -10,6 +10,8 @@ const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodName = document.getElementById('food-name')
 const foodRecipe = document.getElementById('food-recipe')
 const ingredientsList = document.querySelector('.ingredients-list')
+const searchForm = document.getElementById('categories-search-field')
+const categoriesSearchInput = document.getElementById('categories-search-input')
 
 
 // Fetch all categories from the API
@@ -99,6 +101,26 @@ function renderMealCards(categoryMeals) {
 
         countryCuisine.appendChild(templateClone)
     })
+    matchQuery()
+}
+
+function matchQuery() {
+    
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const query = categoriesSearchInput.value.toLowerCase()
+        const allMealNames = document.querySelectorAll('.country-meal-card .country-meal-name')
+
+        if(allMealNames && query){
+            Array.from(allMealNames).forEach( item => {
+                const meals = item.textContent.toLowerCase()
+                const card = item.closest('.country-meal-card')
+                card.style.display = meals.includes(query) ? '' : 'none'
+            })
+        }
+
+        searchForm.reset()
+    })
 }
 
 // Display the detailed recipe for the selected meal
@@ -122,7 +144,7 @@ async function getMealById(id) {
 // Show meal recipe on the page
 function showMealRecipe(meal) {
     const {strMealThumb, strMeal, strInstructions, strYoutube} = meal
-    console.log("meal", meal)
+    // console.log("meal", meal)
     
     popupWindow.style.display = 'block'
     popupImage.src = ''
@@ -149,7 +171,7 @@ function showMealRecipe(meal) {
 function renderIngredients(meal) {
     let ingredientMeasure = []
     ingredientsList.innerHTML = ''
-    console.log(meal)
+    // console.log(meal)
     // render ingredients
     for(const [key, value] of Object.entries(meal)){
         if(key.startsWith('strIngredient') && value){
@@ -172,3 +194,6 @@ function renderIngredients(meal) {
         }
     })
 }
+
+
+// Search functionality

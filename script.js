@@ -1,7 +1,7 @@
 // DOM Variables
-const foodName = document.querySelector('.food-name')
+const heroFoodName = document.querySelector('.hero-food-name')
 const foodRecipeInstruction = document.querySelector('.food-recipe-instruction')
-const ingredientsList = document.querySelector('.ingredients-list')
+const heroIngredientsList = document.querySelector('.hero-ingredients-list')
 const heroFoodImage = document.querySelector('.hero-food-image')
 const watchLink = document.querySelector('.watch-link')
 const searchField = document.getElementById('home-search-field')
@@ -9,12 +9,24 @@ const searchInput = document.getElementById('search-input')
 const filteredMealsContainer = document.querySelector('.filtered-meals-container')
 const mealCardTemplate = document.getElementById('meal-card-template')
 
+const popupWindow = document.getElementById('popup-window')
+const closeBtn = document.querySelector('.close-icon')
+const popupImage = document.getElementById('popup-image')
+const popupWatchLink = document.querySelector('.popup-watch-link')
+const foodRecipe = document.getElementById('food-recipe')
+const foodName = document.getElementById('food-name')
+const ingredientsList = document.querySelector('.ingredients-list')
+const searchResults = document.getElementById('search-results')
+const heroFilteredMeals = document.querySelector('.hero-filtered-meals')
+const recipesCount = document.querySelector('.results-recipes-count')
+const searchFor = document.querySelector('.search-for')
+
 
 // Get random meal
 async function getRandomMeal() {
     let response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php')
     let data = await response.json()
-    
+    console.log(data.meals[0])
     renderRandomMeal(data.meals[0])   
 }
 getRandomMeal()
@@ -22,10 +34,10 @@ getRandomMeal()
 // Handle home page random meal UI
 function renderRandomMeal(randomMeal) {
     // Meal name and Instructions
-    foodName.innerText = randomMeal.strMeal
+    heroFoodName.innerText = randomMeal.strMeal
     foodRecipeInstruction.innerText = randomMeal.strInstructions
     // Ingredients
-    renderIngredients(randomMeal)
+    renderHeroIngredients(randomMeal)
 
     heroFoodImage.setAttribute('src', `${randomMeal.strMealThumb}/medium`)
     heroFoodImage.setAttribute('alt', `${randomMeal.strMeal} Image`)
@@ -33,17 +45,18 @@ function renderRandomMeal(randomMeal) {
 }
 
 // Handle ingredients and ingredients quantity UI
-function renderIngredients(meal) {
+function renderHeroIngredients(meal) {
     let ingredientMeasure = []
 
     // render ingredients
     for(const [key, value] of Object.entries(meal)){
         if(key.startsWith('strIngredient') && value){
             const li = document.createElement('li')
-            li.classList.add('ingredient')
+            li.classList.add('hero-ingredient')
 
             li.innerText = value
-            ingredientsList.appendChild(li)
+            heroIngredientsList.appendChild(li)
+            
         }
 
         if(key.startsWith('strMeasure') && value !== " "){
@@ -52,7 +65,7 @@ function renderIngredients(meal) {
     }
 
     // render ingredients' measures
-    document.querySelectorAll('.ingredient').forEach(( item, index ) => {
+    document.querySelectorAll('.hero-ingredient').forEach(( item, index ) => {
         if(index <= ingredientMeasure.length){
             item.innerText += ` (${ingredientMeasure[index]})`
         }
@@ -63,6 +76,8 @@ function renderIngredients(meal) {
 searchField.addEventListener('submit', (e) => {
     e.preventDefault()
     const query = searchInput.value
+    searchFor.innerText = query
+
     getMatchingMeals(query)
 
     searchField.reset()
@@ -72,12 +87,24 @@ async function getMatchingMeals(meal) {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${meal}`)
     const data = await response.json()
     
-    renderMatchedMeals(data.meals)
+    if(data.meals !== null) {
+        renderMatchedMeals(data.meals)
+        heroFilteredMeals.style.display = 'block'
+        recipesCount.innerText = `${data.meals.length} recipes found for `
+        
+        if(heroFilteredMeals.style.display === 'block'){
+            searchResults.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
+        }
+    } else {
+        heroFilteredMeals.style.display = 'none'
+    }
 }
 
 function renderMatchedMeals(meals) {
     filteredMealsContainer.innerHTML = ''
-
 
     meals.forEach( meal => {
         const {idMeal, strMeal, strCategory, strMealThumb} = meal
@@ -86,6 +113,9 @@ function renderMatchedMeals(meals) {
         const mealCard = templateClone.querySelector('.meal-card')
         const mealImg = templateClone.querySelector('.meal-card-img')
         const mealName = templateClone.querySelector('.meal-card-name')
+        mealCard.setAttribute('data-card', idMeal)
+        mealImg.setAttribute('data-card', idMeal)
+        mealName.setAttribute('data-card', idMeal)
 
         mealImg.src = `${strMealThumb}/medium`
         mealName.innerText = strMeal
@@ -95,7 +125,6 @@ function renderMatchedMeals(meals) {
 }
 
 // Popup Window functionality
-
 
 // Display the detailed recipe for the selected meal
 document.addEventListener('click', (e) => {
@@ -112,13 +141,15 @@ closeBtn.addEventListener('click', () => {
 async function getMealById(id) {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
     const data = await response.json()
+
+    console.log(data.meals[0])
     showMealRecipe(data.meals[0])
 }
 
 // Show meal recipe on the page
 function showMealRecipe(meal) {
     const {strMealThumb, strMeal, strInstructions, strYoutube} = meal
-    console.log("meal", meal)
+    // console.log("meal", meal)
     
     popupWindow.style.display = 'block'
     popupImage.src = ''
@@ -145,7 +176,7 @@ function showMealRecipe(meal) {
 function renderIngredients(meal) {
     let ingredientMeasure = []
     ingredientsList.innerHTML = ''
-    console.log(meal)
+    
     // render ingredients
     for(const [key, value] of Object.entries(meal)){
         if(key.startsWith('strIngredient') && value){

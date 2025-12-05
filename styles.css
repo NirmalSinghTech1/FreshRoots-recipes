@@ -14,6 +14,10 @@
     --primary-color: #DD5117;   
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -134,8 +138,8 @@ main {
     width: 60%;
 }
 
-.hero-recipe .food-name,
-.popup-recipe .food-name {
+.hero-recipe .hero-food-name,
+.popup-recipe .hero-food-name {
     margin-bottom: 1em;
     border-left: 4px solid var(--primary-color);
     width: 60%;
@@ -149,7 +153,7 @@ main {
     line-height: 1.5;
 }
 
-.hero-recipe .ingredients-list li,
+.hero-recipe .hero-ingredients-list li,
 .ingredients-list li {
     list-style-type: circle;
     list-style-position: inside;
@@ -208,12 +212,23 @@ main .hero-filtered-meals {
     margin-top: 4em;
     padding-bottom: 2em;
     text-align: center;
+    display: none;
 }
 
 main .hero-filtered-meals h3{
     font-size: 2rem;
     border-bottom: 2px solid var(--primary-color);
     display: inline;
+}
+
+.hero-filtered-meals > p {
+    margin-top: 1em;
+    color: var(--text-light-color);
+    font-size: 1.2rem;
+}
+
+span.search-for {
+    font-style: italic;
 }
 
 main .filtered-meals-container {
@@ -322,6 +337,14 @@ main .hr-line {
     border-bottom: 2px solid var(--primary-color);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: flex;
 }
 
 /* .food-item-card::after {
