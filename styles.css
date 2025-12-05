@@ -23,6 +23,7 @@ html, body {
     /* max-width: 100vw; */
     /* min-height: 100vh; */
     font-family: "Inter", sans-serif;
+    /* overflow-x: hidden; */
 }
 
 body .blur-overlay {
@@ -39,7 +40,7 @@ body .blur-overlay {
 }
 
 main {
-    padding-bottom: 3em;
+    /* padding-bottom: 3em; */
 }
 
 /* Header Styling */
@@ -125,6 +126,8 @@ main {
     width: 70%;
     margin: 2em auto 0;
     color: var(--text-white-color);
+    padding-bottom: 2em;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .hero-recipe {
@@ -147,8 +150,8 @@ main {
 }
 
 .hero-recipe .ingredients-list li,
-.popup-ingredients-list li {
-    list-style-type:circle;
+.ingredients-list li {
+    list-style-type: circle;
     list-style-position: inside;
 }
 
@@ -199,11 +202,36 @@ a svg:hover {
     transform: scale(1.1);
 }
 
+/* Filtered Meals Sectoin */
+main .hero-filtered-meals {
+    color: var(--text-white-color);
+    margin-top: 4em;
+    padding-bottom: 2em;
+    text-align: center;
+}
+
+main .hero-filtered-meals h3{
+    font-size: 2rem;
+    border-bottom: 2px solid var(--primary-color);
+    display: inline;
+}
+
+main .filtered-meals-container {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 90%;
+    margin: 0 auto;
+    padding: 2em;
+    grid-gap: 1em;
+    margin-top: 4em;
+    /* grid-template-columns: repeat(auto-fill, minmax(240px)); */
+}
+
 /* ===============
-   Categories Page
+   Ingredients Page
    ===============
 */
-
 main .categories-heading {
     width: 100%;
     text-align: center;
@@ -221,13 +249,61 @@ main .hr-line {
     margin: 2em auto 0;
 }
 
-.categories, .meal-cards-container {
+.ingredients-and-mealslist {
+    max-width: 100vw;
+    display: flex;
+}
+
+.ingredient-message {
+    color: var(--text-light-color);
+}
+
+.ingredients {
+    border-right: 2px solid rgba(255, 255, 255, 0.3);
+    margin: 3em 0 0 3em;
+}
+
+.aside-container {
+    margin-top: 2em;
+    color: var(--text-white-color);
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 100%;
+    border-top-left-radius: 10px;
+    padding-top: 2em;
+    padding-left: 2em;
+}
+
+.aside-container h2 {
+    font-weight: 500;
+}
+
+.aside-meals-list {
+    margin-top: 2em;
+    list-style-position: inside;
+    list-style-type: decimal;
+}
+
+.aside-meals-list li {
+    line-height: 2;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.aside-meals-list li:hover {
+    color: var(--text-light-color);
+}
+
+.categories, 
+.meal-cards-container, 
+.filtered-meals-container {
     display: grid;
     max-width: 100%;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-gap: 4em 1em;
+    width: 70%;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-gap: 4em .5em;
     padding-bottom: 3em;
-    margin: 3em 8em 0;
+    margin: 3em 2em 0;
 }
 
 .food-item-card {
@@ -235,9 +311,8 @@ main .hr-line {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--primary-black);
     width: 250px;
-    height: 280px;
+    height: 300px;
     color: var(--text-light-color);
     border-radius: 30px;
     padding: 1em;
@@ -245,9 +320,11 @@ main .hr-line {
     transition: transform 0.4s ease, box-shadow 0.4s ease;
     border-right: 2px solid var(--primary-color);
     border-bottom: 2px solid var(--primary-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.food-item-card::after {
+/* .food-item-card::after {
     position: absolute;
     content: "";
     width: 250px;
@@ -257,17 +334,17 @@ main .hr-line {
     bottom: 0;
     background: linear-gradient(to top, var(--primary-black), #1A1A1A, transparent);
     filter: blur(10px);
-}
+} */
 
 .food-item-card:hover {
     /* outline: 2px solid var(--primary-color);
     outline-offset: 10px; */
+    cursor: pointer;
     transform: translateY(-2px);
-    box-shadow: 0 0 10px 4px var(--primary-color);
+    box-shadow: 0 0 8px var(--primary-color);
 }
 
 .meal-cards-container .card-food-item-header {
-    align-self: flex-start;
     display: flex;
     justify-content: space-between;
     margin-top: 1em;
@@ -275,8 +352,13 @@ main .hr-line {
 }
 
 .card-food-item-header .heart-icon {
-    margin-right: 1em;
+    /* margin-right: 1em; */
     cursor: pointer;
+    fill: rgba(255, 255, 255, 0.3);
+}
+
+.heart-icon.liked {
+    fill: red;
 }
 
 .food-item-card .card-food-img {
@@ -292,32 +374,53 @@ main .hr-line {
 .meal-cards-container .card-food-description {
     margin-top: 1em;
     margin-bottom: .5em;
-    font-size: .77rem;
+    font-size: .9rem;
     overflow-y: auto;
+    cursor: text;
 }
 
 /* Card Scrollbar */
 .card-food-description::-webkit-scrollbar,
-.sidebar-form::-webkit-scrollbar {
+.sidebar-form::-webkit-scrollbar,
+.popup-recipe::-webkit-scrollbar {
     width: 3px;
     border-radius: 10px;
     background: transparent;
 }
 
 .card-food-description::-webkit-scrollbar-thumb,
-.sidebar-form::-webkit-scrollbar-thumb {
+.sidebar-form::-webkit-scrollbar-thumb, 
+.popup-recipe::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 10px;
 }
 
 .card-food-description:hover::-webkit-scrollbar,
-.sidebar-form:hover::-webkit-scrollbar {
+.sidebar-form:hover::-webkit-scrollbar, 
+.popup-recipe:hover::-webkit-scrollbar {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
 .card-food-description:hover::-webkit-scrollbar-thumb,
-.sidebar-form:hover::-webkit-scrollbar-thumb {
+.sidebar-form:hover::-webkit-scrollbar-thumb, 
+.popup-recipe:hover::-webkit-scrollbar-thumb {
     background-color: var(--primary-color);
+}
+
+.toggle-container {
+    top: 0;
+    right: 0;
+    background-color: #c9c9c9;
+    width: 400px;
+    padding: 2em;
+    height: 100%;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.ingredient-meals-list {
+    list-style-type: circle;
+    list-style-position: inside;
 }
 
 
@@ -332,10 +435,9 @@ main .hr-line {
 }
 
 .country-cuisine {
-    /* background-color: red; */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     grid-gap: 2em 1em;
-    width: 70%;
+    width: 77%;
     margin-left: auto;
 }
 
@@ -357,7 +459,7 @@ aside .sidebar-form {
     display: flex;
     flex-direction: column;
     gap: .7em;
-    height: 100%;
+    height: 89%;
     overflow-y: auto;
 }
 
@@ -386,7 +488,7 @@ input[type="radio"] {
     accent-color: var(--primary-color);
 }
 
-.country-meal-card {
+.country-meal-card, .meal-card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -399,19 +501,19 @@ input[type="radio"] {
     border: 1px solid transparent;
 }
 
-.country-meal-card:hover {
+.country-meal-card:hover, .meal-card:hover {
     background-color: rgba(255, 255, 255, .2);
     border: 1px solid var(--text-light-color);
     transform: translateY(-2px);
 }
 
-.country-meal-card .meal-card-img {
+.country-meal-card .meal-card-img, .meal-card .meal-card-img {
     border-radius: 50%;
     border: 3px solid var(--text-light-color);
     transition: transform 0.4s ease;
 }
 
-.country-cuisine .country-meal-name {
+.country-cuisine .country-meal-name, .meal-card .meal-card-name {
     text-align: center;
     color: var(--text-white-color);
     font-weight: 400;
@@ -419,6 +521,9 @@ input[type="radio"] {
 
 .popup-window {
     position: fixed;
+    display: none;
+    overflow: hidden;
+    min-height: 500px;
     z-index: 4;
     left: 50%;
     top: 50%;
@@ -448,10 +553,43 @@ input[type="radio"] {
     color: var(--text-white-color);
 }
 
+.popup-header .close-icon {
+    cursor: pointer;
+    transition: fill 0.3s ease;
+    position: relative;
+}
+
+.popup-header .close-icon:hover {
+    fill: var(--primary-color);
+}
+
+.close-icon:hover::before {
+    position: absolute;
+    content: "";
+    width: 40px;
+    height: 40px;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--text-light-color);
+}
+
 .popup-content {
     display: flex;
+    height: 90%;
     gap: 2em;
-    padding: 2em;
+    padding-left: 2em;
+    padding-top: 2em;
+    padding-right: .5em;
+    padding-bottom: 2em;
+    color: var(--text-white-color);
+}
+
+.popup-recipe {
+    height: 100%;
+    overflow: auto;
+    margin-bottom: 1em;
 }
 
 .popup-recipe .food-name {
@@ -460,4 +598,5 @@ input[type="radio"] {
 
 .popup-recipe .food-recipe {
     font-weight: 400;
+    font-size: 1rem;
 }

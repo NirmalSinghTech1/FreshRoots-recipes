@@ -12,20 +12,19 @@ const foodRecipe = document.getElementById('food-recipe')
 const ingredientsList = document.querySelector('.ingredients-list')
 
 
-// Fetch all country names from the API
+// Fetch all categories from the API
 async function getCountries() {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/list.php?a=list`)
+    const response = await fetch('https://www.themealdb.com/api/json/v1/1/categories.php')
     const data = await response.json()
-    
     // Render sidebar options (country names)
-    renderSidebarOptions(data.meals)
+    renderSidebarOptions(data.categories)
 }
 
 getCountries()
 
 // Handle sidebar options UI
-function renderSidebarOptions(countries) {
-    countries.forEach( (country, index) => {
+function renderSidebarOptions(categories) {
+    categories.forEach( (category, index) => {
         
         // Clone sidebar template to create new input and label
         const sidebarClone = sidebarOptionTemplate.content.cloneNode(true)
@@ -33,53 +32,53 @@ function renderSidebarOptions(countries) {
         const inputEl = sidebarClone.querySelector('input[type="radio"]')
         const labelEl = sidebarClone.querySelector('label')
         
-        inputEl.value = country.strArea
-        inputEl.id = country.strArea.toLowerCase()
+        inputEl.value = category.strCategory
+        inputEl.id = category.strCategory.toLowerCase()
 
         // Set the first country as default
         if(index === 0){
             inputEl.checked = 'true'
         }
 
-        labelEl.setAttribute('for', inputEl.id)
-        labelEl.innerText = country.strArea
+        labelEl.setAttribute('for', category.strCategory.toLowerCase())
+        labelEl.innerText = category.strCategory
 
         sidebarForm.appendChild(sidebarClone)
     })
-    // Get the currently selected country from the sidebar filter
+    // Get the currently selected category from the sidebar filter
     getSelectedOption()
 }
 
-// Get selected country
+// Get selected category
 function getSelectedOption () {
-    const allCheckboxes = document.querySelectorAll('input[type="radio"][name="country"]')
+    const allCheckboxes = document.querySelectorAll('input[type="radio"][name="category"]')
         allCheckboxes.forEach( checkbox => {
-            if(checkbox.checked === true) getMealByArea(checkbox.value)
+            if(checkbox.checked === true) getMealByCategory(checkbox.value)
 
             // Fire event when selected option change
             checkbox.addEventListener('change', () => {
-                const selectedCountry = Array.from(allCheckboxes)
+                const selectedCategory = Array.from(allCheckboxes)
                     .filter( item => item.checked === true)
                     .map(item => item.value)[0]
-                // Fetch country details from the API of the selected country
-                getMealByArea(selectedCountry)
+                // Fetch Category details from the API of the selected country
+                getMealByCategory(selectedCategory)
             })
     })
 }
 
-// Fetch selected country details from the API
-async function getMealByArea(country) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${country}`)
+// Fetch selected category details from the API
+async function getMealByCategory(category) {
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
     const data = await response.json()
 
-    // Display all means for the selected country
+    // Display all meals for the selected category
     renderMealCards(data.meals)
 }
 
-// Render selected Country meals on the page 
-function renderMealCards(areaMeals) {
+// Render selected Category meals on the page 
+function renderMealCards(categoryMeals) {
     countryCuisine.innerHTML = ''
-    areaMeals.forEach( (meal, index) => {
+    categoryMeals.forEach( (meal, index) => {
         const templateClone = countryMealTemplate.content.cloneNode(true)
         const mealImg = templateClone.querySelector('.meal-card-img')
         const mealName = templateClone.querySelector('.country-meal-name')

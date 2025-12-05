@@ -49,28 +49,68 @@
         <main>
             <h1 class="categories-heading">INGREDIENTS</h1>
             <hr class="hr-line">
-            <div class="ingredients meal-cards-container">
-                <template id="food-item-template">
-                    <div class="food-item-card">
-                        <img 
-                            src="" 
-                            alt="" 
-                            width="125"
-                            height="125"
-                            class="card-food-img">
-                        <div class="card-food-item-header">
-                            <h3 class="card-food-name"></h3>
-                            <!-- <button class="c-food-favourite"> -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart heart-icon" viewBox="0 0 16 16">
-                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-                            </svg>
-                            <!-- </button> -->
+            <div class="ingredients-and-mealslist">
+                <div class="ingredients meal-cards-container">
+                    <template id="food-item-template">
+                        <div class="food-item-card">
+                            <img 
+                                src="" 
+                                alt="" 
+                                width="125"
+                                height="125"
+                                class="card-food-img">
+                            <div class="card-food-item-header">
+                                <h3 class="card-food-name"></h3>
+                                <!-- <button class="c-food-favourite"> -->
+                                <svg xmlns="http://www.w3.org/2000/svg" id="like-btn" width="24" height="24" fill="currentColor" class="bi bi-heart-fill heart-icon" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                                </svg>
+                                <!-- </button> -->
+                            </div>
+                            <p class="card-food-description"></p>
                         </div>
-                        <p class="card-food-description"></p>
-                    </div>
-                </template>
+                    </template>
+                </div>
+                <div class="aside-container">
+                    <h2>Filter by Ingredients</h2>
+                    <ul class="aside-meals-list" id="ingredient-meals-list">
+                            
+                    </ul>
+                </div>
             </div>
         </main>
+    </div>
+    <div class="popup-window" id="popup-window">
+        <div class="popup-header">
+            <h1>Recipe</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x close-icon" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+            </svg>
+        </div>
+        <div class="popup-content">
+            <div class="popup-image-link">
+                <img 
+                    src="" 
+                    alt=""
+                    width="250"
+                    height="250"
+                    id="popup-image"
+                    >
+                <a href="#" class="popup-watch-link" target="_blank">
+                    <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                    </svg>
+                    Watch and Cook
+                </a>
+            </div>
+            <div class="popup-recipe">
+                <h2 class="food-name" id="food-name"></h2>
+                <p class="food-recipe" id="food-recipe"></p>
+                <ul class="ingredients-list">
+                   <!-- Render Ingredients using JavaScript -->
+                </ul>
+            </div>
+        </div>
     </div>
     <script src="./ingredients.js"></script>
 </body>
