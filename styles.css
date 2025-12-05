@@ -139,7 +139,7 @@ main {
 }
 
 .hero-recipe .hero-food-name,
-.popup-recipe .hero-food-name {
+.popup-recipe .food-name {
     margin-bottom: 1em;
     border-left: 4px solid var(--primary-color);
     width: 60%;

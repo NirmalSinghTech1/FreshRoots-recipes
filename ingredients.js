@@ -9,6 +9,7 @@ const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodName = document.getElementById('food-name')
 const foodRecipe = document.getElementById('food-recipe')
 const ingredientsList = document.querySelector('.ingredients-list')
+const ingredientsSearchField = document.querySelector('.ingredient-search-field')
 
 async function getIngredients() {
     const response = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list')
@@ -35,7 +36,8 @@ function renderIngredientCards(meals) {
             const likeBtn = clone.getElementById('like-btn')
 
             foodItemCard.setAttribute('data-ingredient', element.strIngredient)
-            cardImg.src = element.strThumb
+            cardImg.src = `${element.strThumb.slice(0, -4)}-small.png`
+            
             cardFoodName.textContent = element.strIngredient
             cardFoodName.setAttribute('data-ingredient', element.strIngredient)
             cardFoodDesc.textContent = element.strDescription
@@ -46,6 +48,44 @@ function renderIngredientCards(meals) {
             })
         }
     });
+
+    matchIngredient()
+}
+
+function matchIngredient() {
+    const searchInput = document.querySelector('.ingredient-search-input')
+
+    searchInput.addEventListener('input', () => {
+        const allIngredients = document.querySelectorAll('.card-food-name')
+        const query = searchInput.value.toLowerCase()
+
+        if(allIngredients && query) {
+            Array.from(allIngredients).forEach( item => {
+                const ingredientName = item.textContent.toLowerCase()
+                const card = item.closest('.food-item-card')
+    
+                card.style.display = ingredientName.includes(query) ? '' : 'none'
+            })
+        }
+
+    })
+    // ingredientsSearchField.addEventListener('submit', (e) => {
+    //     e.preventDefault()
+
+    //     const allIngredients = document.querySelectorAll('.card-food-name')
+    //     const query = searchInput.value.toLowerCase()
+
+    //     if(allIngredients && query) {
+    //         Array.from(allIngredients).forEach( item => {
+    //             const ingredientName = item.textContent.toLowerCase()
+    //             const card = item.closest('.food-item-card')
+    
+    //             card.style.display = ingredientName.includes(query) ? '' : 'none'
+    //         })
+    //     }
+
+    //     ingredientsSearchField.reset()
+    // })
 }
 
 document.addEventListener('click', (e) => {

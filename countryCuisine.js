@@ -10,6 +10,7 @@ const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodName = document.getElementById('food-name')
 const foodRecipe = document.getElementById('food-recipe')
 const ingredientsList = document.querySelector('.ingredients-list')
+const countrySearchInput = document.getElementById('country-search-input')
 
 
 // Fetch all country names from the API
@@ -99,6 +100,24 @@ function renderMealCards(areaMeals) {
         mealName.innerText = meal.strMeal
 
         countryCuisine.appendChild(templateClone)
+    })
+
+    matchQuery()
+}
+
+function matchQuery() {
+    countrySearchInput.addEventListener('input', () => {
+        const allMeals = document.querySelectorAll('.country-meal-name')
+        const query = countrySearchInput.value.toLowerCase()
+
+        if(allMeals && query) {
+            Array.from(allMeals).forEach( item => {
+                const countryFoodName = item.textContent.toLowerCase()
+                const card = item.closest('.country-meal-card')
+
+                card.style.display = countryFoodName.includes(query) ? '' : 'none'
+            })
+        }
     })
 }
 

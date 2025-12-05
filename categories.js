@@ -106,10 +106,10 @@ function renderMealCards(categoryMeals) {
 
 function matchQuery() {
     
-    searchForm.addEventListener('submit', (e) => {
-        e.preventDefault()
+    categoriesSearchInput.addEventListener('input', () => {
         const query = categoriesSearchInput.value.toLowerCase()
         const allMealNames = document.querySelectorAll('.country-meal-card .country-meal-name')
+        if(!query) return
 
         if(allMealNames && query){
             Array.from(allMealNames).forEach( item => {
@@ -118,8 +118,6 @@ function matchQuery() {
                 card.style.display = meals.includes(query) ? '' : 'none'
             })
         }
-
-        searchForm.reset()
     })
 }
 
