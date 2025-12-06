@@ -43,10 +43,6 @@ body .blur-overlay {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-main {
-    /* padding-bottom: 3em; */
-}
-
 /* Header Styling */
 .header {
     color: var(--text-light-color);
@@ -69,8 +65,9 @@ main {
     margin-right: .6em;
 }
 
-.header h1 {
-    font-size: 1.1rem;
+.header .logo-text {
+    text-decoration: none;
+    font-size: 1.2rem;
     color: var(--text-white-color);
     font-weight: 500;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -91,10 +88,40 @@ main {
 .nav-bar-container ul li{
     cursor: pointer;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
 }
 
-.nav-bar-container ul li:hover {
+nav a {
+    transition: color 0.2s ease;
+    position: relative;
+}
+
+nav a::before {
+    content: "";
+    position: absolute;
+    background-color: var(--primary-color);
+    width: 0%;
+    bottom: -5px;
+    left: 0;
+    height: 3px;
+    border-radius: 6px;
+    transition: width 0.2s linear;
+}
+
+nav ul li a:hover {
     color: var(--text-white-color);
+}
+
+nav a:hover::before {
+    width: 100%;
+}
+
+.nav-bar-container ul a.active {
+    color: var(--text-white-color);
+}
+
+nav a.active::before {
+    width: 100%;
 }
 
 /* Search Field */
@@ -148,7 +175,7 @@ main {
 
 .hero-recipe .food-recipe-instruction,
 .popup-recipe .food-recipe {
-    font-weight: 300;
+    font-weight: 400;
     margin-bottom: 1em;
     line-height: 1.5;
 }
@@ -622,4 +649,53 @@ input[type="radio"] {
 .popup-recipe .food-recipe {
     font-weight: 400;
     font-size: 1rem;
+}
+
+/* ===============
+   Contact US Page
+   ===============
+ */
+
+.contact-us-container {
+    color: var(--text-white-color);
+    width: 90%;
+    margin: 0 auto;
+}
+
+.contact-us-container h1 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.contact-us-container div p {
+    width: 80%;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0 auto;
+}
+
+.contact-us-container .about-me p {
+    padding: 1em 2em;
+    border-radius: 14px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-right: 2px solid var(--primary-color);
+    border-left: 2px solid var(--primary-color);
+}
+
+.about-me p svg {
+    margin-right: .3em;
+    fill: var(--text-white-color);
+    cursor: pointer;
+    transition: fill 0.4s ease;
+}
+
+.about-me p svg:hover {
+    fill: var(--primary-color);
+}
+
+.contact-us-container .contact-form-container {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 3em;
+    background-color: #1A1A1A;
 }
