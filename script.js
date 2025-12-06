@@ -118,6 +118,7 @@ function renderMatchedMeals(meals) {
         mealName.setAttribute('data-card', idMeal)
 
         mealImg.src = `${strMealThumb}/medium`
+        mealImg.alt = `${strMeal} Image`
         mealName.innerText = strMeal
 
         filteredMealsContainer.appendChild(templateClone)
@@ -142,7 +143,6 @@ async function getMealById(id) {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
     const data = await response.json()
 
-    console.log(data.meals[0])
     showMealRecipe(data.meals[0])
 }
 
@@ -158,6 +158,7 @@ function showMealRecipe(meal) {
     foodRecipe.innerText = ''
     
     popupImage.src = `${strMealThumb}/medium`
+    popupImage.alt = `${strMeal} image`
     popupWatchLink.setAttribute('href', strYoutube)
     foodName.innerText = strMeal
     foodRecipe.innerText = strInstructions
