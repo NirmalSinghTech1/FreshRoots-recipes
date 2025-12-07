@@ -1,32 +1,45 @@
+// DOM varialbes
 const ingredientsContainer = document.querySelector('.ingredients')
 const foodItemTemplate = document.getElementById('food-item-template')
 const ingredientMealsList = document.getElementById('ingredient-meals-list')
-
+const ingredientsSearchField = document.querySelector('.ingredient-search-field')
+const searchInput = document.querySelector('#search-input')
+// Popup window variabled
+const popupWindowBackdrop = document.querySelector('.popup-backdrop')
 const popupWindow = document.getElementById('popup-window')
 const closeBtn = document.querySelector('.close-icon')
 const popupImage = document.getElementById('popup-image')
 const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodName = document.getElementById('food-name')
 const foodRecipe = document.getElementById('food-recipe')
-const ingredientsList = document.querySelector('.ingredients-list')
-const ingredientsSearchField = document.querySelector('.ingredient-search-field')
+const ingredientsList = document.querySelector('.popup-ingredients-list')
 
+const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1'
+
+// Fetch ingredients list from the API
 async function getIngredients() {
-    const response = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list')
-    const data = await response.json()
-    renderIngredientCards(data.meals)
+    try {
+        const response = await fetch(`${API_BASE_URL}/list.php?i=list`)
+        const data = await response.json()
+
+        // Display ingredients on the page
+        renderIngredientCards(data.meals)
+    } catch(error) {
+        console.error('Error found: ',error)
+    }
 }
 
 getIngredients()
 
+// Display ingredients on the page
 function renderIngredientCards(meals) {
+    // Show message in the aside container on first render
     const p = document.createElement('p')
     p.classList.add('ingredient-message')
-    p.innerText = 'Choose an ingredient to filter recipes containing it.'
+    p.textContent = 'Choose an ingredient to filter recipes containing it.'
     ingredientMealsList.appendChild(p)
 
     meals.forEach((element, index) => {
-    
         if(index < 24) {
             const clone = foodItemTemplate.content.cloneNode(true)
             const cardImg = clone.querySelector('.card-food-img')
@@ -37,7 +50,6 @@ function renderIngredientCards(meals) {
 
             foodItemCard.setAttribute('data-ingredient', element.strIngredient)
             cardImg.src = `${element.strThumb.slice(0, -4)}-small.png`
-            
             cardFoodName.textContent = element.strIngredient
             cardFoodName.setAttribute('data-ingredient', element.strIngredient)
             cardFoodDesc.textContent = element.strDescription
@@ -48,95 +60,92 @@ function renderIngredientCards(meals) {
             })
         }
     });
-
-    matchIngredient()
 }
 
-function matchIngredient() {
-    const searchInput = document.querySelector('.ingredient-search-input')
+// Handle search query 
+searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase()
+    filterDisplayedIngredients(query)
+})
 
-    searchInput.addEventListener('input', () => {
-        const allIngredients = document.querySelectorAll('.card-food-name')
-        const query = searchInput.value.toLowerCase()
-
-        if(allIngredients && query) {
-            Array.from(allIngredients).forEach( item => {
-                const ingredientName = item.textContent.toLowerCase()
-                const card = item.closest('.food-item-card')
+// Filter displayed ingredients based on query
+function filterDisplayedIngredients(query) {
+    const allIngredients = document.querySelectorAll('.card-food-name')
     
-                card.style.display = ingredientName.includes(query) ? '' : 'none'
-            })
-        }
-
-    })
-    // ingredientsSearchField.addEventListener('submit', (e) => {
-    //     e.preventDefault()
-
-    //     const allIngredients = document.querySelectorAll('.card-food-name')
-    //     const query = searchInput.value.toLowerCase()
-
-    //     if(allIngredients && query) {
-    //         Array.from(allIngredients).forEach( item => {
-    //             const ingredientName = item.textContent.toLowerCase()
-    //             const card = item.closest('.food-item-card')
-    
-    //             card.style.display = ingredientName.includes(query) ? '' : 'none'
-    //         })
-    //     }
-
-    //     ingredientsSearchField.reset()
-    // })
+    if(!allIngredients) return
+    if(query) {
+        Array.from(allIngredients).forEach( item => {
+            const ingredientName = item.textContent.toLowerCase()
+            const card = item.closest('.food-item-card')
+            // toggle visibility based on match
+            card.style.display = ingredientName.includes(query) ? '' : 'none'
+        })
+    }
 }
 
+// Get selected ingredient id
 document.addEventListener('click', (e) => {
     e.target.dataset.ingredient && getMealByIngredient(e.target.dataset.ingredient)
 })
 
+// Fetch meals from the API using chosen ingredient
 async function getMealByIngredient(ingredient) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`)
-    const data = await response.json()
-
-    renderMealsByIngredient(data.meals)
+    try {
+        const response = await fetch(`${API_BASE_URL}/filter.php?i=${ingredient}`)
+        const data = await response.json()
+    
+        // Create meals list based on ingredient selected
+        createMealsList(data.meals)
+    } catch(error) {
+        console.error('Error found: ', error)
+    }
 }
 
-function renderMealsByIngredient(meals) {
+// Create meals list items and 
+function createMealsList(meals) {
+    const fragment = document.createDocumentFragment()
     ingredientMealsList.innerHTML = ''
 
     meals.forEach( meal => {
         const li = document.createElement('li')
-        li.innerText = meal.strMeal
+        li.textContent = meal.strMeal
         li.setAttribute('data-meal', meal.idMeal)
 
-        ingredientMealsList.appendChild(li)
+        fragment.appendChild(li)
     })
+    ingredientMealsList.appendChild(fragment)
 }
 
-
-// Display the detailed recipe for the selected meal
+// POPUP WINDOW FUNCTIONALITY
+// Get the ID of the clicked meal item
 document.addEventListener('click', (e) => {
     e.target.dataset.meal && getMealById(e.target.dataset.meal)
 })
 
 // Close popup window 
 closeBtn.addEventListener('click', () => {
-    popupWindow.style.display = 'none'
-    document.body.style.pointerEvents  = 'auto'
+    popupWindowBackdrop.style.display = 'none'
+    // document.body.style.pointerEvents  = 'auto'
 })
 
 // Fetch particular meal by ID from the API
 async function getMealById(id) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
-    const data = await response.json()
-
-    showMealRecipe(data.meals[0])
+    try {
+        const response = await fetch(`${API_BASE_URL}/lookup.php?i=${id}`)
+        const data = await response.json()
+    
+        showMealRecipe(data.meals[0])
+    } catch(error) {
+        console.error('Error found: ', error)
+    }
 }
 
-// Show meal recipe on the page
+// Show meal recipe on the popup window
 function showMealRecipe(meal) {
     const {strMealThumb, strMeal, strInstructions, strYoutube} = meal
-    console.log("meal", meal)
     
-    popupWindow.style.display = 'block'
+    popupWindowBackdrop.style.display = 'block'
+    popupWindowBackdrop.setAttribute('data-hidden', 'false')
     popupImage.src = ''
     popupWatchLink.href = ''
     foodName.innerText = ''
@@ -146,42 +155,33 @@ function showMealRecipe(meal) {
     popupWatchLink.setAttribute('href', strYoutube)
     foodName.innerText = strMeal
     foodRecipe.innerText = strInstructions
-    renderIngredients(meal)
 
-    // Prevent clicks on the page when the popup windows is displayed
-    document.addEventListener('click', (e) => {
-        if(popupWindow.style.display !== 'none' && !e.target.closest('#popup-window')){
-            document.body.style.pointerEvents  = 'none'
-            popupWindow.style.pointerEvents = 'auto'
-        }
-    })
+    // renderIngredients(meal)
+    ingredientsList.innerHTML = ''
+    ingredientsList.appendChild(createIngredientListItems(meal))
 }
 
-// Handle ingredients and ingredients quantity UI
-function renderIngredients(meal) {
-    console.log(meal)
-    let ingredientMeasure = []
-    ingredientsList.innerHTML = ''
+// Prevent clicks on the page when the popup window is displayed
+popupWindowBackdrop.addEventListener('click', (e) => {
+    if(!e.target.closest('#popup-window')){
+        popupWindowBackdrop.style.display = 'none'
+    }
+})
 
-    // render ingredients
-    for(const [key, value] of Object.entries(meal)){
-        if(key.startsWith('strIngredient') && value){
+// Create Ingredients list items
+function createIngredientListItems(meal) {
+    const fragment = document.createDocumentFragment()
+    
+    for(let i = 1; i <= 20; i++) {
+        const ingredient = meal[`strIngredient${i}`]
+        const measure = meal[`strMeasure${i}`]
+    
+        if(ingredient && ingredient.trim()) {
             const li = document.createElement('li')
-            li.classList.add('ingredient')
 
-            li.innerText = value
-            ingredientsList.appendChild(li)
-        }
-
-        if(key.startsWith('strMeasure') && value !== " "){
-            ingredientMeasure.push(value)
+            li.textContent = `${ingredient} ${measure ? `(${measure})` : ''}`
+            fragment.appendChild(li)
         }
     }
-
-    // render ingredients' measures
-    document.querySelectorAll('.ingredient').forEach(( item, index ) => {
-        if(index <= ingredientMeasure.length){
-            item.innerText += ` (${ingredientMeasure[index]})`
-        }
-    })
+    return fragment
 }

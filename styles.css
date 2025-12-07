@@ -24,14 +24,15 @@ html, body {
     background: url('./images/background.webp') no-repeat center center fixed;
     background-color: var(--primary-black);
     background-size: cover;
-    /* max-width: 100vw; */
-    /* min-height: 100vh; */
     font-family: "Inter", sans-serif;
-    /* overflow-x: hidden; */
+    overflow-x: hidden;
+}
+
+main {
+    position: relative;
 }
 
 body .blur-overlay {
-    /* position: fixed; */
     top: 0;
     left: 0;
     width: 100%;
@@ -52,6 +53,7 @@ body .blur-overlay {
     padding: 2em;
 }
 
+/* Website Logo */
 .header .logo-div {
     width: 45px;
     height: 45px;
@@ -73,6 +75,7 @@ body .blur-overlay {
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* Navigation links */
 .header .nav-bar-container {
     margin-left: auto;
 }
@@ -150,6 +153,11 @@ nav a.active::before {
     left: 12px;
 }
 
+/* ==========
+   INDEX PAGE
+   ==========
+*/
+
 /* Hero section styling */
 .hero-food-recipe {
     display: flex;
@@ -159,6 +167,33 @@ nav a.active::before {
     color: var(--text-white-color);
     padding-bottom: 2em;
     border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* No recipe found message */
+.no-recipe-found-message {
+    position: absolute;
+    display: flex;
+    gap: .7em;
+    align-items: center;
+    content: "";
+    top: -2em;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: var(--text-white-color);
+    padding: 1.3em 1.5em;
+    border-radius: 10px;
+    border-bottom: 4px solid #B81D24;
+    right: 1em;
+    transition: transform 0.2s ease;
+    transform: translateX(110%);
+}
+
+.no-recipe-found-message svg:first-child {
+    fill: #B81D24;
+}
+
+.no-recipe-found-message svg:nth-child(2) {
+    align-self: flex-start;
+    transform: translate(1em, -1em);
 }
 
 .hero-recipe {
@@ -233,7 +268,7 @@ a svg:hover {
     transform: scale(1.1);
 }
 
-/* Filtered Meals Sectoin */
+/* Search Results Section */
 main .hero-filtered-meals {
     color: var(--text-white-color);
     margin-top: 4em;
@@ -267,7 +302,6 @@ main .filtered-meals-container {
     padding: 2em;
     grid-gap: 1em;
     margin-top: 4em;
-    /* grid-template-columns: repeat(auto-fill, minmax(240px)); */
 }
 
 /* ===============
@@ -291,6 +325,7 @@ main .hr-line {
     margin: 2em auto 0;
 }
 
+/* Ingredients container */
 .ingredients-and-mealslist {
     max-width: 100vw;
     display: flex;
@@ -305,6 +340,7 @@ main .hr-line {
     margin: 3em 0 0 3em;
 }
 
+/* Ingredients aside container */
 .aside-container {
     margin-top: 2em;
     color: var(--text-white-color);
@@ -366,29 +402,17 @@ main .hr-line {
     -webkit-backdrop-filter: blur(10px);
 }
 
+/* Hide meal card if it doesn't match query */
 .hide {
     display: none;
 }
 
+/* Show meal card if meal name includes query */
 .show {
     display: flex;
 }
 
-/* .food-item-card::after {
-    position: absolute;
-    content: "";
-    width: 250px;
-    height: 15%;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    bottom: 0;
-    background: linear-gradient(to top, var(--primary-black), #1A1A1A, transparent);
-    filter: blur(10px);
-} */
-
 .food-item-card:hover {
-    /* outline: 2px solid var(--primary-color);
-    outline-offset: 10px; */
     cursor: pointer;
     transform: translateY(-2px);
     box-shadow: 0 0 8px var(--primary-color);
@@ -402,7 +426,6 @@ main .hr-line {
 }
 
 .card-food-item-header .heart-icon {
-    /* margin-right: 1em; */
     cursor: pointer;
     fill: rgba(255, 255, 255, 0.3);
 }
@@ -529,11 +552,6 @@ aside .sidebar-form {
     color: var(--text-white-color);
 }
 
-/* .option-container input[type="radio"]:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-} */
-
 input[type="radio"] {
     accent-color: var(--primary-color);
 }
@@ -569,15 +587,23 @@ input[type="radio"] {
     font-weight: 400;
 }
 
-.popup-window {
+/* POPUP WINDOW STYLING */
+.popup-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
-    display: none;
+    height: 100%;
+    width: 100%;
+    left: 0%;
+    top: 0%;
     overflow: hidden;
-    min-height: 500px;
-    z-index: 4;
+    z-index: 10;
+    display: none;
+}
+
+.popup-window {
     left: 50%;
     top: 50%;
-    transform: translate(-50%, 5%);
+    transform: translate(13%, 7%);
     top: 0;
     width: 80%;
     height: 90%;

@@ -1,25 +1,55 @@
+// DOM Variables
 const countryMealTemplate = document.getElementById('country-meal-template')
 const countryCuisine = document.querySelector('.country-cuisine')
 const sidebarForm = document.getElementById('sidebar-form')
 const sidebarOptionTemplate = document.getElementById('sidebar-option-template')
 const countryCuisineContainer = document.querySelector('.country-cuisine-container')
+const countrySearchInput = document.getElementById('search-input')
+// Popup window variables
+const popupWindowBackdrop = document.querySelector('.popup-backdrop')
 const popupWindow = document.getElementById('popup-window')
 const closeBtn = document.querySelector('.close-icon')
 const popupImage = document.getElementById('popup-image')
 const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodName = document.getElementById('food-name')
 const foodRecipe = document.getElementById('food-recipe')
-const ingredientsList = document.querySelector('.ingredients-list')
-const countrySearchInput = document.getElementById('country-search-input')
+const ingredientsList = document.querySelector('.popup-ingredients-list')
 
+const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1'
+
+// Handle search query
+countrySearchInput.addEventListener('input', () => {
+    const query = countrySearchInput.value.toLowerCase()
+    filterDisplayedCuisine(query)
+})
+
+// Filter displayed cuisine based on query
+function filterDisplayedCuisine(query) {
+    const allMeals = document.querySelectorAll('.country-meal-name')
+
+    if(!allMeals) return
+    
+    if(query) {
+        Array.from(allMeals).forEach( item => {
+            const countryFoodName = item.textContent.toLowerCase()
+            const card = item.closest('.country-meal-card')
+            // Toggle visibility based on match
+            card.style.display = countryFoodName.includes(query) ? '' : 'none'
+        })
+    }
+}
 
 // Fetch all country names from the API
 async function getCountries() {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/list.php?a=list`)
-    const data = await response.json()
-    
-    // Render sidebar options (country names)
-    renderSidebarOptions(data.meals)
+    try {
+        const response = await fetch(`${API_BASE_URL}/list.php?a=list`)
+        const data = await response.json()
+        
+        // Render sidebar options (country names)
+        renderSidebarOptions(data.meals)
+    } catch(error) {
+        console.error('Error found: ', error)
+    }
 }
 
 getCountries()
@@ -27,7 +57,6 @@ getCountries()
 // Handle sidebar options UI
 function renderSidebarOptions(countries) {
     countries.forEach( (country, index) => {
-        
         // Clone sidebar template to create new input and label
         const sidebarClone = sidebarOptionTemplate.content.cloneNode(true)
 
@@ -48,33 +77,30 @@ function renderSidebarOptions(countries) {
         sidebarForm.appendChild(sidebarClone)
     })
     // Get the currently selected country from the sidebar filter
-    getSelectedOption()
+    const selectedCountry = document.querySelector('input[name="country"]:checked').value
+    getMealByArea(selectedCountry)
 }
 
 // Get selected country
-function getSelectedOption () {
-    const allCheckboxes = document.querySelectorAll('input[type="radio"][name="country"]')
-        allCheckboxes.forEach( checkbox => {
-            if(checkbox.checked === true) getMealByArea(checkbox.value)
-
-            // Fire event when selected option change
-            checkbox.addEventListener('change', () => {
-                const selectedCountry = Array.from(allCheckboxes)
-                    .filter( item => item.checked === true)
-                    .map(item => item.value)[0]
-                // Fetch country details from the API of the selected country
-                getMealByArea(selectedCountry)
-            })
-    })
-}
+sidebarForm.addEventListener('change', (e) => {
+    if(e.target.matches('input[name="country"]')){
+        const selectedCountry = e.target.value
+        
+        getMealByArea(selectedCountry)
+    }
+})
 
 // Fetch selected country details from the API
 async function getMealByArea(country) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${country}`)
-    const data = await response.json()
+    try {
+        const response = await fetch(`${API_BASE_URL}/filter.php?a=${country}`)
+        const data = await response.json()
 
-    // Display all means for the selected country
-    renderMealCards(data.meals)
+        // Display all meals for the selected country
+        renderMealCards(data.meals)
+    } catch(error) {
+        console.error('Error found: ', error)
+    }
 }
 
 // Render selected Country meals on the page 
@@ -101,50 +127,38 @@ function renderMealCards(areaMeals) {
 
         countryCuisine.appendChild(templateClone)
     })
-
-    matchQuery()
 }
 
-function matchQuery() {
-    countrySearchInput.addEventListener('input', () => {
-        const allMeals = document.querySelectorAll('.country-meal-name')
-        const query = countrySearchInput.value.toLowerCase()
-
-        if(allMeals && query) {
-            Array.from(allMeals).forEach( item => {
-                const countryFoodName = item.textContent.toLowerCase()
-                const card = item.closest('.country-meal-card')
-
-                card.style.display = countryFoodName.includes(query) ? '' : 'none'
-            })
-        }
-    })
-}
-
-// Display the detailed recipe for the selected meal
+// POPUP WINDOW FUNCTIONALITY
+// Get the ID of the clicked cuisine item
 document.addEventListener('click', (e) => {
     e.target.dataset.card && getMealById(e.target.dataset.card)
 })
 
 // Close popup window 
 closeBtn.addEventListener('click', () => {
-    popupWindow.style.display = 'none'
-    document.body.style.pointerEvents  = 'auto'
+    popupWindowBackdrop.style.display = 'none'
 })
 
-// Fetch particular meal by ID from the API
+// Fetch particular cuisine by ID from the API
 async function getMealById(id) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
-    const data = await response.json()
-    showMealRecipe(data.meals[0])
+    try {
+        const response = await fetch(`${API_BASE_URL}/lookup.php?i=${id}`)
+        const data = await response.json()
+
+        // Display cuisine recipe on the popup window
+        showMealRecipe(data.meals[0])
+    } catch(error) {
+        console.error('Error found: ', error)
+    }
 }
 
-// Show meal recipe on the page
+// Show meal recipe on the popup window
 function showMealRecipe(meal) {
     const {strMealThumb, strMeal, strInstructions, strYoutube} = meal
-    console.log("meal", meal)
     
-    popupWindow.style.display = 'block'
+    popupWindowBackdrop.style.display = 'block'
+    popupWindowBackdrop.setAttribute('data-hidden', 'false')
     popupImage.src = ''
     popupWatchLink.href = ''
     foodName.innerText = ''
@@ -154,41 +168,31 @@ function showMealRecipe(meal) {
     popupWatchLink.setAttribute('href', strYoutube)
     foodName.innerText = strMeal
     foodRecipe.innerText = strInstructions
-    renderIngredients(meal)
 
-    // Prevent clicks on the page when the popup windows is displayed
-    document.addEventListener('click', (e) => {
-        if(popupWindow.style.display !== 'none' && !e.target.closest('#popup-window')){
-            document.body.style.pointerEvents  = 'none'
-            popupWindow.style.pointerEvents = 'auto'
-        }
-    })
+    ingredientsList.appendChild(createIngredientListItems(meal))
 }
 
-// Handle ingredients and ingredients quantity UI
-function renderIngredients(meal) {
-    let ingredientMeasure = []
-    ingredientsList.innerHTML = ''
-    console.log(meal)
-    // render ingredients
-    for(const [key, value] of Object.entries(meal)){
-        if(key.startsWith('strIngredient') && value){
+// Prevent clicks on the page when the popup window is displayed
+popupWindowBackdrop.addEventListener('click', (e) => {
+    if(!e.target.closest('#popup-window')){
+        popupWindowBackdrop.style.display = 'none'
+    }
+})
+
+// Create Ingredients list items
+function createIngredientListItems(meal) {
+    const fragment = document.createDocumentFragment()
+    
+    for(let i = 1; i <= 20; i++) {
+        const ingredient = meal[`strIngredient${i}`]
+        const measure = meal[`strMeasure${i}`]
+    
+        if(ingredient && ingredient.trim()) {
             const li = document.createElement('li')
-            li.classList.add('ingredient')
 
-            li.innerText = value
-            ingredientsList.appendChild(li)
-        }
-
-        if(key.startsWith('strMeasure') && value !== " "){
-            ingredientMeasure.push(value)
+            li.textContent = `${ingredient} ${measure ? `(${measure})` : ''}`
+            fragment.appendChild(li)
         }
     }
-
-    // render ingredients' measures
-    document.querySelectorAll('.ingredient').forEach(( item, index ) => {
-        if(index <= ingredientMeasure.length){
-            item.innerText += ` (${ingredientMeasure[index]})`
-        }
-    })
+    return fragment
 }

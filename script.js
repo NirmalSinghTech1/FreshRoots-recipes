@@ -6,87 +6,89 @@ const heroFoodImage = document.querySelector('.hero-food-image')
 const watchLink = document.querySelector('.watch-link')
 const searchField = document.getElementById('home-search-field')
 const searchInput = document.getElementById('search-input')
-const filteredMealsContainer = document.querySelector('.filtered-meals-container')
 const mealCardTemplate = document.getElementById('meal-card-template')
-
+// Popup window variables
+const popupWindowBackdrop = document.querySelector('.popup-backdrop')
 const popupWindow = document.getElementById('popup-window')
 const closeBtn = document.querySelector('.close-icon')
 const popupImage = document.getElementById('popup-image')
 const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodRecipe = document.getElementById('food-recipe')
 const foodName = document.getElementById('food-name')
-const ingredientsList = document.querySelector('.ingredients-list')
+// Search results variables
 const searchResults = document.getElementById('search-results')
+const filteredMealsContainer = document.querySelector('.filtered-meals-container')
 const heroFilteredMeals = document.querySelector('.hero-filtered-meals')
 const recipesCount = document.querySelector('.results-recipes-count')
 const searchFor = document.querySelector('.search-for')
 
+const ingredientsList = document.querySelector('.popup-ingredients-list')
+const noRecipeFoundMsg = document.querySelector('.no-recipe-found-message')
+const closeMessage = document.querySelector('.no-recipe-found-message .close-message')
 
-// Get random meal
+const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1'
+
+// Fetch random meal from API on page load
 async function getRandomMeal() {
-    let response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php')
-    let data = await response.json()
-    console.log(data.meals[0])
-    renderRandomMeal(data.meals[0])   
+    try {
+        let response = await fetch(`${API_BASE_URL}/random.php`)
+        let data = await response.json()
+        
+        renderRandomMeal(data.meals[0])   
+    } catch(error) {
+        console.error('Error fetching data: ', error)
+    }
 }
 getRandomMeal()
 
-// Handle home page random meal UI
+// Display fetched random meal on home page
 function renderRandomMeal(randomMeal) {
-    // Meal name and Instructions
     heroFoodName.innerText = randomMeal.strMeal
     foodRecipeInstruction.innerText = randomMeal.strInstructions
-    // Ingredients
-    renderHeroIngredients(randomMeal)
-
     heroFoodImage.setAttribute('src', `${randomMeal.strMealThumb}/medium`)
     heroFoodImage.setAttribute('alt', `${randomMeal.strMeal} Image`)
     watchLink.setAttribute('href', `${randomMeal.strYoutube}`)
+
+    // Get ingredients list and render it on the page
+    heroIngredientsList.appendChild(createIngredientListItems(randomMeal))
 }
 
-// Handle ingredients and ingredients quantity UI
-function renderHeroIngredients(meal) {
-    let ingredientMeasure = []
+// Create Ingredients list items
+function createIngredientListItems(meal) {
+    const fragment = document.createDocumentFragment()
 
-    // render ingredients
-    for(const [key, value] of Object.entries(meal)){
-        if(key.startsWith('strIngredient') && value){
+    for(let i = 1; i <= 20; i++) {
+        const ingredient = meal[`strIngredient${i}`]
+        const measure = meal[`strMeasure${i}`]
+    
+        if(ingredient && ingredient.trim()) {
             const li = document.createElement('li')
-            li.classList.add('hero-ingredient')
 
-            li.innerText = value
-            heroIngredientsList.appendChild(li)
-            
-        }
-
-        if(key.startsWith('strMeasure') && value !== " "){
-            ingredientMeasure.push(value)
+            li.textContent = `${ingredient} ${measure ? `(${measure})` : ''}`
+            fragment.appendChild(li)
         }
     }
-
-    // render ingredients' measures
-    document.querySelectorAll('.hero-ingredient').forEach(( item, index ) => {
-        if(index <= ingredientMeasure.length){
-            item.innerText += ` (${ingredientMeasure[index]})`
-        }
-    })
+    return fragment
 }
 
-// Search field
+// Handle search field query
 searchField.addEventListener('submit', (e) => {
     e.preventDefault()
+
     const query = searchInput.value
     searchFor.innerText = query
-
     getMatchingMeals(query)
 
     searchField.reset()
 })
 
+let timer;
+// Fetch meals from the API as per the search query
 async function getMatchingMeals(meal) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${meal}`)
+    const response = await fetch(`${API_BASE_URL}/search.php?s=${meal}`)
     const data = await response.json()
     
+    // Check if there are any meals match the search query
     if(data.meals !== null) {
         renderMatchedMeals(data.meals)
         heroFilteredMeals.style.display = 'block'
@@ -99,20 +101,27 @@ async function getMatchingMeals(meal) {
             })
         }
     } else {
+        // If not, then display message and hide search results section
         heroFilteredMeals.style.display = 'none'
+        noRecipeFoundMsg.style.transform = 'translateX(0%)'
+        
+        timer = setTimeout(() => {
+            noRecipeFoundMsg.style.transform = 'translateX(110%)'
+        }, 4000)
     }
 }
 
+// Display meals in the search results if they match the query
 function renderMatchedMeals(meals) {
     filteredMealsContainer.innerHTML = ''
 
     meals.forEach( meal => {
-        const {idMeal, strMeal, strCategory, strMealThumb} = meal
+        const {idMeal, strMeal, strMealThumb} = meal
         const templateClone = mealCardTemplate.content.cloneNode(true)
-        
         const mealCard = templateClone.querySelector('.meal-card')
         const mealImg = templateClone.querySelector('.meal-card-img')
         const mealName = templateClone.querySelector('.meal-card-name')
+
         mealCard.setAttribute('data-card', idMeal)
         mealImg.setAttribute('data-card', idMeal)
         mealName.setAttribute('data-card', idMeal)
@@ -125,33 +134,42 @@ function renderMatchedMeals(meals) {
     })
 }
 
-// Popup Window functionality
+// Close no result found message
+closeMessage.addEventListener('click', () => {
+    noRecipeFoundMsg.style.transform = 'translateX(110%)'
+    clearTimeout(timer)
+})
 
-// Display the detailed recipe for the selected meal
+
+// POPUP WINDOW FUNCTIONALITY
+// Get the ID of the clicked meal item
 document.addEventListener('click', (e) => {
     e.target.dataset.card && getMealById(e.target.dataset.card)
 })
 
 // Close popup window 
 closeBtn.addEventListener('click', () => {
-    popupWindow.style.display = 'none'
-    document.body.style.pointerEvents  = 'auto'
+    popupWindowBackdrop.style.display = 'none'
 })
 
 // Fetch particular meal by ID from the API
 async function getMealById(id) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
-    const data = await response.json()
+    try {
+        const response = await fetch(`${API_BASE_URL}/lookup.php?i=${id}`)
+        const data = await response.json()
 
-    showMealRecipe(data.meals[0])
+        showMealRecipe(data.meals[0])
+    } catch(error) {
+        console.error("Error found: ", error)
+    }
 }
 
-// Show meal recipe on the page
+// Show meal detailed recipe on the popup window
 function showMealRecipe(meal) {
     const {strMealThumb, strMeal, strInstructions, strYoutube} = meal
-    // console.log("meal", meal)
     
-    popupWindow.style.display = 'block'
+    popupWindowBackdrop.style.display = 'block'
+    popupWindowBackdrop.setAttribute('data-hidden', 'false')
     popupImage.src = ''
     popupWatchLink.href = ''
     foodName.innerText = ''
@@ -162,41 +180,14 @@ function showMealRecipe(meal) {
     popupWatchLink.setAttribute('href', strYoutube)
     foodName.innerText = strMeal
     foodRecipe.innerText = strInstructions
-    renderIngredients(meal)
 
-    // Prevent clicks on the page when the popup windows is displayed
-    document.addEventListener('click', (e) => {
-        if(popupWindow.style.display !== 'none' && !e.target.closest('#popup-window')){
-            document.body.style.pointerEvents  = 'none'
-            popupWindow.style.pointerEvents = 'auto'
-        }
-    })
-}
-
-// Handle ingredients and ingredients quantity UI
-function renderIngredients(meal) {
-    let ingredientMeasure = []
     ingredientsList.innerHTML = ''
-    
-    // render ingredients
-    for(const [key, value] of Object.entries(meal)){
-        if(key.startsWith('strIngredient') && value){
-            const li = document.createElement('li')
-            li.classList.add('ingredient')
-
-            li.innerText = value
-            ingredientsList.appendChild(li)
-        }
-
-        if(key.startsWith('strMeasure') && value !== " "){
-            ingredientMeasure.push(value)
-        }
-    }
-
-    // render ingredients' measures
-    document.querySelectorAll('.ingredient').forEach(( item, index ) => {
-        if(index <= ingredientMeasure.length){
-            item.innerText += ` (${ingredientMeasure[index]})`
-        }
-    })
+    ingredientsList.appendChild(createIngredientListItems(meal))
 }
+
+// Prevent clicks on the page when the popup window is displayed
+popupWindowBackdrop.addEventListener('click', (e) => {
+    if(!e.target.closest('#popup-window')){
+        popupWindowBackdrop.style.display = 'none'
+    }
+})
