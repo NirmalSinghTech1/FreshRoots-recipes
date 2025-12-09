@@ -3,7 +3,9 @@ const ingredientsContainer = document.querySelector('.ingredients')
 const foodItemTemplate = document.getElementById('food-item-template')
 const ingredientMealsList = document.getElementById('ingredient-meals-list')
 const ingredientsSearchField = document.querySelector('.ingredient-search-field')
-const searchInput = document.querySelector('#search-input')
+const searchInput = document.querySelector('.search-input')
+const ingredientAsideContainer = document.getElementById('ingredient-aside-container')
+const asideMeals = document.querySelector('.aside-container-header p')
 // Popup window variabled
 const popupWindowBackdrop = document.querySelector('.popup-backdrop')
 const popupWindow = document.getElementById('popup-window')
@@ -13,6 +15,10 @@ const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodName = document.getElementById('food-name')
 const foodRecipe = document.getElementById('food-recipe')
 const ingredientsList = document.querySelector('.popup-ingredients-list')
+const hamburger = document.getElementById('hamburger')
+const navbarContainer = document.getElementById('nav-bar-container')
+const sidebarEl = document.querySelector('.aside-container')
+const collapseBtn = document.getElementById('collapse-btn')
 
 const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1'
 
@@ -96,6 +102,15 @@ async function getMealByIngredient(ingredient) {
     
         // Create meals list based on ingredient selected
         createMealsList(data.meals)
+        sidebarEl.classList.add('show-aside-container')
+
+        if(sidebarEl.classList.contains('show-aside-container')) {
+            ingredientAsideContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
+        }
+        
     } catch(error) {
         console.error('Error found: ', error)
     }
@@ -114,7 +129,18 @@ function createMealsList(meals) {
         fragment.appendChild(li)
     })
     ingredientMealsList.appendChild(fragment)
+    asideMeals.style.opacity = '1'
 }
+
+// Hamburger 
+hamburger.addEventListener('click', () => {
+   navbarContainer.classList.toggle('show')
+})
+
+collapseBtn.addEventListener('click', () => {
+    sidebarEl.classList.toggle('show-aside-container')
+    collapseBtn.classList.toggle('rotate-svg')
+})
 
 // POPUP WINDOW FUNCTIONALITY
 // Get the ID of the clicked meal item

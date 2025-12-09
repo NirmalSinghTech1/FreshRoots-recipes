@@ -1,6 +1,7 @@
 // DOM VARIABLES
 const countryMealTemplate = document.getElementById('country-meal-template')
 const countryCuisine = document.querySelector('.country-cuisine')
+const sidebar = document.querySelector('.sidebar')
 const sidebarForm = document.getElementById('sidebar-form')
 const sidebarOptionTemplate = document.getElementById('sidebar-option-template')
 const countryCuisineContainer = document.querySelector('.country-cuisine-container')
@@ -15,6 +16,9 @@ const popupWatchLink = document.querySelector('.popup-watch-link')
 const foodName = document.getElementById('food-name')
 const foodRecipe = document.getElementById('food-recipe')
 const ingredientsList = document.querySelector('.popup-ingredients-list')
+const hamburger = document.getElementById('hamburger')
+const navbarContainer = document.getElementById('nav-bar-container')
+const collapseBtn = document.getElementById('collapse-btn')
 
 const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1'
 
@@ -130,6 +134,16 @@ function renderMealCards(categoryMeals) {
     })
     
 }
+
+// Hamburger 
+hamburger.addEventListener('click', () => {
+   navbarContainer.classList.toggle('show')
+})
+
+collapseBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('show-sidebar')
+    collapseBtn.classList.toggle('rotate-svg')
+})
 
 // POPUP WINDOW FUNCTIONALITY
 // Get the ID of the clicked meal item

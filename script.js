@@ -25,6 +25,8 @@ const searchFor = document.querySelector('.search-for')
 const ingredientsList = document.querySelector('.popup-ingredients-list')
 const noRecipeFoundMsg = document.querySelector('.no-recipe-found-message')
 const closeMessage = document.querySelector('.no-recipe-found-message .close-message')
+const hamburger = document.getElementById('hamburger')
+const navbarContainer = document.getElementById('nav-bar-container')
 
 const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1'
 
@@ -74,10 +76,11 @@ function createIngredientListItems(meal) {
 // Handle search field query
 searchField.addEventListener('submit', (e) => {
     e.preventDefault()
-
-    const query = searchInput.value
-    searchFor.innerText = query
-    getMatchingMeals(query)
+    if(searchInput.value){
+        const query = searchInput.value
+        searchFor.innerText = query
+        getMatchingMeals(query)
+    }
 
     searchField.reset()
 })
@@ -138,6 +141,11 @@ function renderMatchedMeals(meals) {
 closeMessage.addEventListener('click', () => {
     noRecipeFoundMsg.style.transform = 'translateX(110%)'
     clearTimeout(timer)
+})
+
+// Hamburger 
+hamburger.addEventListener('click', () => {
+   navbarContainer.classList.toggle('show')
 })
 
 

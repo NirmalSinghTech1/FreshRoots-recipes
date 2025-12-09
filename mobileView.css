@@ -1,0 +1,400 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    /* ======
+       HEADER
+       ====== 
+    */
+    main {
+        position: relative;
+    }
+
+   .header {
+        flex-direction: column;
+        padding: 1em;
+        background-color: rgba(0, 0, 0, 0.3);
+        /* z-index: 2; */
+    }
+    
+    .header .logo-container {
+        width: 100%;
+        z-index: 10;
+    }
+
+    header .logo-div {
+        width: 35px;
+        height: 35px;
+    }
+
+    .logo-container .logo-text {
+        z-index: 3;
+    }
+
+    .logo-div .logo {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .nav-bar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 14;
+        transform: translateX(-100%);
+        transition: transform 0.4s linear;
+    }
+    
+    .nav-bar-container.show {
+        transform: translateX(0%);
+    }
+
+    .nav-bar-container ul {
+        width: 70vw;
+        height: 100vh;
+        padding-top: 6em;
+        padding-left: 2em;
+        padding-right: 1em;
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+        backdrop-filter: blur(20px);
+        /* background-color: rgba(0, 0, 0, 0.9); */
+        background-color: #161616;
+        flex-direction: column;
+   }
+
+   .header .nav-bar-container ul {
+        margin-left: 0;
+   }
+
+   .nav-bar-container ul li{
+        align-self: flex-start;
+   }
+
+    /* Hamburger */
+    .hamburger {
+        cursor: pointer;
+        margin-left: auto;
+        display: block;
+        z-index: 10;
+    }
+
+    .hamburger input {
+        display: none;
+    }
+
+    .hamburger svg {
+        height: 2em;
+        z-index: 5;
+        transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .line {
+        fill: none;
+        stroke: white;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 3;
+        transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                    stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .line-top-bottom {
+        stroke-dasharray: 12 63;
+    }
+
+    .hamburger input:checked + svg {
+        transform: rotate(-45deg);
+    }
+
+    .hamburger input:checked + svg .line-top-bottom {
+        stroke-dasharray: 20 300;
+        stroke-dashoffset: -32.42;
+    }
+    /* Search field */
+    .search-field {
+        width: 100%;
+        margin-top: 1em;
+    }
+    
+    .search-field input {
+        width: 100%;
+    }
+
+    .search-field #search-btn {
+        display: block;
+        padding: .7em;
+        border-radius: 20px;
+        margin-top: .7em;
+        font-family: inherit;
+        border: none;
+        outline: none;
+        transition: transform 0.3s ease;
+    }
+
+    #search-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* HERO SECTION */
+    .hero-food-recipe {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .hero-recipe {
+        width: 90%;
+    }
+
+    .hero-recipe .hero-food-name {
+        width: 100%;
+        margin-top: 1em;
+        order: -1;
+    }
+
+    .hero-food-img-and-play-icon {
+        margin: 0;
+        order: -1;
+    }
+
+    main .filtered-meals-container {
+        width: 90%;
+        padding: 1.5em;
+    }
+
+    /* POPUP WINDOW */
+    .popup-watch-link {
+        margin-top: 1em;
+    }
+
+    .popup-window {
+        width: 95%;
+        transform: translate(3%, 5%);
+        overflow: hidden;
+    }
+
+    .popup-header {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    .popup-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .popup-image-link {
+        margin: 0 auto;
+        margin-top: 1em;
+    }
+
+    .popup-window .popup-image-link img {
+        width: 150px;
+        height: 150px;
+        padding: .8em;
+        border-radius: 20px;
+        border-bottom: 3px solid #DD5117;
+        border-right: 3px solid #DD5117;
+    }
+
+    .popup-watch-link {
+        margin-top: .5em;
+    }
+
+    .popup-window .popup-content {
+        flex-direction: column;
+        padding: 0;
+        gap: .5em;
+    }
+
+    .popup-recipe {
+        padding-left: 1em;
+        padding-right: 1em;
+        margin-right: .5em;
+    }
+
+    .popup-recipe .food-recipe, .popup-ingredients-list {
+        font-size: .95rem;
+    }
+
+    .popup-recipe::-webkit-scrollbar {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .popup-recipe::-webkit-scrollbar-thumb {
+        background-color: #DD5117;
+    }
+
+    /* CATEGORIES PAGE */
+    main .categories-heading {
+        margin-top: 1em;
+        font-size: 1.6rem;
+    }
+
+    main .hr-line {
+        margin-top: 0.8em;
+    }
+
+    .country-cuisine {
+        grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+        margin-left: 1em;
+        margin-top: 6em;
+        width: 90%;
+        grid-gap: 1em;
+    }
+
+    .country-meal-card .meal-card-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    aside {
+        transform: translateY(-5em);
+        width: 90%;
+        height: 53px;
+        margin-left: 1em;
+        transition: height 0.3s ease;
+        background-color: #161616;
+    }
+
+    .aside-container h3, .sidebar-header h3 {
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+
+    aside.show-sidebar {
+        height: 250px;
+        padding-bottom: 2.5em;
+    }
+
+    aside .sidebar-form {
+        overflow: auto;
+    }
+
+    .sidebar-form::-webkit-scrollbar {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .sidebar-form::-webkit-scrollbar-thumb {
+        background-color: #DD5117;
+    }
+
+    .sidebar-form .option-container label {
+        color: aliceblue;
+    }
+
+    #collapse-btn {
+        display: inline-block;
+        align-self: flex-start;
+        transition: transform 0.4s ease-in-out;
+    }
+
+    #collapse-btn.rotate-svg {
+        transform: rotate(180deg);
+    }
+
+    /* ===============
+      INGREDIENTS PAGE
+      ================
+    */
+    .ingredients-and-mealslist {
+        position: relative;
+        overflow: auto;
+    }
+
+    .ingredients-and-mealslist .aside-container {
+        position: absolute;
+        top: 0;
+        background-color: #161616;
+        padding: 0;
+        padding: 1em;
+        height: 56px;
+        overflow: hidden;
+        width: 90%;
+        border-radius: 14px;
+        left: 0;
+        transform: translateX(5%);
+        transition: height 0.4s ease-in-out;
+    }
+    
+    .aside-container.show-aside-container,
+    .sidebar.show-aside-container {
+        height: 400px;
+    }
+    
+    .aside-container-header, .sidebar > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .aside-container .aside-meals-list {
+        height: 76%;
+        overflow-y: auto;
+    }
+
+    .aside-meals-list::-webkit-scrollbar {
+        background-color: rgba(255, 255, 255, 0.3);
+        width: 3px;
+    }
+
+    .aside-meals-list::-webkit-scrollbar-thumb {
+        background-color: #DD5117;
+    }
+
+    .ingredients {
+        border: 0;
+    }
+
+    .ingredients.meal-cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        margin: 9em auto 0;
+        margin-left: 0.5em;
+        place-items: center;
+        width: 90%;
+        grid-gap: 3em 1em;
+    }
+
+    .ingredients .food-item-card {
+        width: 170px;
+        height: 250px;
+    }
+
+    .food-item-card .card-food-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .about-me {
+        padding: 0 1em;
+        overflow-x: hidden;
+    }
+
+    .contact-us-container {
+        padding-block: 2em;
+        width: 100%;
+    }
+
+    .contact-us-container .about-me p {
+        width: 95%;
+        padding: 1em;
+    }
+}
+
+@media (min-width: 447px) {
+    .popup-window .popup-content {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 768px) {
+    .popup-window .popup-content {
+        padding: 1em;
+        gap: 1em;
+    }
+}

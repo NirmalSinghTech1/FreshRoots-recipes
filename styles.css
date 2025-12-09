@@ -44,6 +44,10 @@ body .blur-overlay {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
+.hamburger {
+    display: none;
+}
+
 /* Header Styling */
 .header {
     color: var(--text-light-color);
@@ -54,6 +58,11 @@ body .blur-overlay {
 }
 
 /* Website Logo */
+.header .logo-container {
+    display: flex;
+    align-items: center;
+}
+
 .header .logo-div {
     width: 45px;
     height: 45px;
@@ -73,6 +82,11 @@ body .blur-overlay {
     color: var(--text-white-color);
     font-weight: 500;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.header .logo-text:focus {
+    outline: 2px solid var(--text-light-color);
+    border-radius: 7px;
 }
 
 /* Navigation links */
@@ -111,11 +125,12 @@ nav a::before {
     transition: width 0.2s linear;
 }
 
-nav ul li a:hover {
+nav ul li a:hover, nav ul li a:focus {
+    outline: none;
     color: var(--text-white-color);
 }
 
-nav a:hover::before {
+nav a:hover::before, nav a:focus::before {
     width: 100%;
 }
 
@@ -153,6 +168,11 @@ nav a.active::before {
     left: 12px;
 }
 
+#search-btn {
+    display: none;
+    font-weight: 600;
+}
+
 /* ==========
    INDEX PAGE
    ==========
@@ -166,7 +186,7 @@ nav a.active::before {
     margin: 2em auto 0;
     color: var(--text-white-color);
     padding-bottom: 2em;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    /* border-bottom: 2px solid rgba(255, 255, 255, 0.3); */
 }
 
 /* No recipe found message */
@@ -249,6 +269,11 @@ nav a.active::before {
     margin-top: 2em;
     text-decoration: none;
     color: var(--text-white-color);
+}
+
+.watch-link:focus {
+    outline: 2px solid var(--text-light-color);
+    border-radius: 7px;
 }
 
 .hero-food-img-and-play-icon a:hover, 
@@ -355,6 +380,13 @@ main .hr-line {
     font-weight: 500;
 }
 
+.aside-container-header > div > p {
+    margin-top: .3em;
+    font-style: italic;
+    color: var(--text-light-color);
+    opacity: 0;
+}
+
 .aside-meals-list {
     margin-top: 2em;
     list-style-position: inside;
@@ -376,6 +408,7 @@ main .hr-line {
 .meal-cards-container, 
 .filtered-meals-container {
     display: grid;
+    /* place-items: center; */
     max-width: 100%;
     width: 70%;
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -521,7 +554,7 @@ aside {
     background-color: rgba(255, 255, 255, .2);
     border-radius: 15px;
     padding: 1em;
-    padding-right: 0;
+    padding-right: 1em;
     width: 15%;
     margin-left: 2em;
     height: 700px;
@@ -534,6 +567,17 @@ aside .sidebar-form {
     gap: .7em;
     height: 89%;
     overflow-y: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#collapse-btn {
+    display: none;
+    fill: var(--text-white-color);
 }
 
 .sidebar h3 {
@@ -675,6 +719,10 @@ input[type="radio"] {
 .popup-recipe .food-recipe {
     font-weight: 400;
     font-size: 1rem;
+}
+
+.popup-ingredients-list {
+    list-style-position: inside;
 }
 
 /* ===============

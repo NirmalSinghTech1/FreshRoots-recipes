@@ -5,6 +5,10 @@ const sidebarForm = document.getElementById('sidebar-form')
 const sidebarOptionTemplate = document.getElementById('sidebar-option-template')
 const countryCuisineContainer = document.querySelector('.country-cuisine-container')
 const countrySearchInput = document.getElementById('search-input')
+const hamburger = document.getElementById('hamburger')
+const navbarContainer = document.getElementById('nav-bar-container')
+const sidebarEl = document.querySelector('.sidebar')
+const collapseBtn = document.getElementById('collapse-btn')
 // Popup window variables
 const popupWindowBackdrop = document.querySelector('.popup-backdrop')
 const popupWindow = document.getElementById('popup-window')
@@ -128,6 +132,16 @@ function renderMealCards(areaMeals) {
         countryCuisine.appendChild(templateClone)
     })
 }
+
+// Hamburger 
+hamburger.addEventListener('click', () => {
+   navbarContainer.classList.toggle('show')
+})
+
+collapseBtn.addEventListener('click', () => {
+    sidebarEl.classList.toggle('show-aside-container')
+    collapseBtn.classList.toggle('rotate-svg')
+})
 
 // POPUP WINDOW FUNCTIONALITY
 // Get the ID of the clicked cuisine item

@@ -7,23 +7,34 @@
 
     <!-- Link CSS file -->
     <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./mobileView.css">
 </head>
 <body>
     <div class="blur-overlay">
 
         <!-- Header -->
         <header class="header">
-            <div class="logo-div">
-                <img 
-                    src="./images/logo.png" 
-                    alt="A book logo with a chef hat printed on it" 
-                    width="30" 
-                    height="30"
-                    class="logo">
+            <div class="logo-container">
+                <div class="logo-div">
+                    <img 
+                        src="./images/logo.png" 
+                        alt="A book logo with a chef hat printed on it" 
+                        width="30" 
+                        height="30"
+                        class="logo">
+                </div>
+                <a href="/" class="logo-text">Fresh Roots Recipes</a>
+                <!-- Hamburger -->
+                <label class="hamburger">
+                    <input type="checkbox" id="hamburger">
+                    <svg viewBox="0 0 32 32">
+                        <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+                        <path class="line" d="M7 16 27 16"></path>
+                    </svg>
+                </label>
             </div>
-            <a href="/" class="logo-text">Fresh Roots Recipes</a>
             <!-- Navigation links -->
-            <nav class="nav-bar-container">
+            <nav class="nav-bar-container" id="nav-bar-container">
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="./categories.html">Categories</a></li>
@@ -33,16 +44,16 @@
                 </ul>
             </nav>
             <!-- Search field -->
-            <form action="#" class="search-field" id="home-search-field">
+            <form action="#" class="search-field" id="categories-search-field">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search search-icon" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg>
                 <input 
                     type="search" 
                     class="search-input" 
+                    id="categories-search-input"
                     autocomplete="off"
                     placeholder="Search recipe"
-                    id="search-input"
                     >
             </form>
         </header>
@@ -75,8 +86,16 @@
                     </template>
                 </div>
                 <!-- Meals list for the selected ingredient -->
-                <div class="aside-container">
-                    <h2>Filter by Ingredients</h2>
+                <div class="aside-container" id="ingredient-aside-container">
+                    <div class="aside-container-header">
+                        <div>
+                            <h3>Filter by Ingredients</h3>
+                            <p>Select a meal to view its detailed recipe.</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="collapse-btn" width="24" height="24" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                        </svg>
+                    </div>
                     <ul class="aside-meals-list" id="ingredient-meals-list" aria-live="polite" aria-atomic="true">
                         <!-- Meals list render using JavaScript -->
                     </ul>
