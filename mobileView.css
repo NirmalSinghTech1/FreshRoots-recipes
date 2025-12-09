@@ -133,6 +133,7 @@
         display: block;
         padding: 1em;
         border-radius: 20px;
+        font-weight: 500;
         margin-top: .7em;
         font-family: inherit;
         border: none;
@@ -343,6 +344,10 @@
         overflow-y: auto;
     }
 
+    .aside-meals-list li {
+        font-size: 1rem;
+    }
+
     .aside-meals-list::-webkit-scrollbar {
         background-color: rgba(255, 255, 255, 0.3);
         width: 3px;
@@ -362,6 +367,10 @@
         place-items: center;
         width: 100%;
         grid-gap: 3em 1em;
+    }
+
+    .card-food-description {
+        font-weight: 400;
     }
 
     .ingredients .food-item-card {
