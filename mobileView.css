@@ -127,9 +127,11 @@
         width: 100%;
     }
 
-    .search-field #search-btn {
+    .search-field #search-btn, input[type="submit"] {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
         display: block;
-        padding: .7em;
+        padding: 1em;
         border-radius: 20px;
         margin-top: .7em;
         font-family: inherit;
@@ -137,6 +139,7 @@
         outline: none;
         transition: transform 0.3s ease;
         background-color: #f1f1f1;
+        color: #161616;
     }
 
     #search-btn:active {
