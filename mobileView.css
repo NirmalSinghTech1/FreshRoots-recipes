@@ -19,7 +19,6 @@
         flex-direction: column;
         padding: 1em;
         background-color: rgba(0, 0, 0, 0.3);
-        /* z-index: 2; */
     }
     
     .header .logo-container {
@@ -30,6 +29,7 @@
     header .logo-div {
         width: 35px;
         height: 35px;
+        background-color: #f1f1f1;
     }
 
     .logo-container .logo-text {
@@ -136,6 +136,7 @@
         border: none;
         outline: none;
         transition: transform 0.3s ease;
+        background-color: #f1f1f1;
     }
 
     #search-btn:active {
@@ -193,6 +194,11 @@
         margin-top: 1em;
     }
 
+    .popup-window .popup-content {
+        padding: 1em;
+        gap: 1em;
+    }
+
     .popup-window .popup-image-link img {
         width: 150px;
         height: 150px;
@@ -215,17 +221,21 @@
     .popup-recipe {
         padding-left: 1em;
         padding-right: 1em;
-        margin-right: .5em;
+        /* margin-right: .5em; */
     }
 
     .popup-recipe .food-recipe, .popup-ingredients-list {
         font-size: .95rem;
     }
 
+    .card-food-description::-webkit-scrollbar,
+    .sidebar-form::-webkit-scrollbar, 
     .popup-recipe::-webkit-scrollbar {
-        background-color: rgba(255, 255, 255, 0.3);
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
+    .card-food-description::-webkit-scrollbar-thumb,
+    .sidebar-form::-webkit-scrollbar-thumb, 
     .popup-recipe::-webkit-scrollbar-thumb {
         background-color: #DD5117;
     }
@@ -262,7 +272,7 @@
         background-color: #161616;
     }
 
-    .aside-container h3, .sidebar-header h3 {
+    .aside-container h3, .sidebar-header h3, .sidebar h3 {
         font-size: 1.1rem;
         font-weight: 400;
     }
@@ -274,14 +284,6 @@
 
     aside .sidebar-form {
         overflow: auto;
-    }
-
-    .sidebar-form::-webkit-scrollbar {
-        background-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .sidebar-form::-webkit-scrollbar-thumb {
-        background-color: #DD5117;
     }
 
     .sidebar-form .option-container label {
@@ -353,15 +355,14 @@
 
     .ingredients.meal-cards-container {
         grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-        margin: 9em auto 0;
-        margin-left: 0.5em;
+        margin: 9em 0.8em 0;
         place-items: center;
-        width: 90%;
+        width: 100%;
         grid-gap: 3em 1em;
     }
 
     .ingredients .food-item-card {
-        width: 170px;
+        width: 180px;
         height: 250px;
     }
 
@@ -386,15 +387,16 @@
     }
 }
 
-@media (min-width: 447px) {
-    .popup-window .popup-content {
-        flex-direction: row;
+@media (max-width: 446px) {
+    .popup-recipe {
+        margin-right: .5em;
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 447px) {
     .popup-window .popup-content {
+        flex-direction: row;
         padding: 1em;
-        gap: 1em;
+        padding-right: .5em;
     }
 }
